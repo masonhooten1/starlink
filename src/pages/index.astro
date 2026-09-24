@@ -1,0 +1,29 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { SITE } from "../config";
+
+// `base` is "/starlink" on GitHub Pages project sites; strip the trailing slash
+// so path joins never double up, whatever Astro emits for BASE_URL.
+const base = import.meta.env.BASE_URL.replace(/\/+$/, "");
+---
+
+<BaseLayout
+  title={`${SITE.name} — plan your Starlink dish placement`}
+  description="Check whether your home has a clear line of sight for Starlink before you order. Drop a pin, swing the dish's open-sky wedge clear of trees, and sign up with confidence."
+>
+  <section class="hero">
+    <h1>Plan your Starlink dish placement before you order</h1>
+    <p>
+      Trees and rooflines cause signal dropouts — but Starlink's own obstruction check only runs in
+      the app, at the install spot, with hardware in hand. {SITE.name} lets you scout your property from
+      a map instead: drop a pin on satellite imagery, swing the dish's open-sky wedge clear of obstructions,
+      and know where the dish can live before you spend a cent.
+    </p>
+    <p>
+      <a class="button" href={`${base}/planner/`}>Open the planner</a>
+    </p>
+    <p class="placeholder-note">
+      Scaffold placeholder — the planner and guides land in later tasks.
+    </p>
+  </section>
+</BaseLayout>
