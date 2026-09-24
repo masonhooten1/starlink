@@ -6,6 +6,9 @@ dist/
 # dependencies
 node_modules/
 
+# test coverage
+coverage/
+
 # logs
 npm-debug.log*
 pnpm-debug.log*
