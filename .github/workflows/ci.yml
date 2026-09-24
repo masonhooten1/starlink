@@ -7,7 +7,7 @@ on:
 
 jobs:
   ci:
-    name: lint, typecheck, build, test
+    name: lint, typecheck, build, content-check, test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -28,6 +28,9 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      - name: Content checks
+        run: npm run check:content
 
       - name: Test
         run: npm test

@@ -1,0 +1,26 @@
+---
+import { SITE } from "../config";
+
+interface Props {
+  heading?: string;
+  body?: string;
+}
+
+const {
+  heading = "Ready to check your own view?",
+  body = "Drop a pin on your home, swing the open-sky wedge clear of trees and rooflines, and see whether the placement works — then sign up through Starlink's official site.",
+} = Astro.props;
+
+const base = import.meta.env.BASE_URL.replace(/\/+$/, "");
+---
+
+<section class="cta-panel">
+  <h2>{heading}</h2>
+  <p>{body}</p>
+  <p class="cta-actions">
+    <a class="button button-secondary" href={`${base}/planner/`}>Open the planner</a>
+    <a class="button" href={SITE.referralUrl} target="_blank" rel="noopener noreferrer"
+      >Check availability on Starlink</a
+    >
+  </p>
+</section>
