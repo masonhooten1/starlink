@@ -19,4 +19,6 @@ export const GEOCODER = {
   minDelayMs: 1100, // stay inside Nominatim's 1 req/s usage policy
 } as const;
 
-export const WEDGE = { spreadDeg: 100, ringsM: [5, 10, 20] } as const;
+// tipRadiusM: how far the wedge reaches from the pin — the arc the user
+// swings, sized to read against the 5–20 m distance rings.
+export const WEDGE = { spreadDeg: 100, ringsM: [5, 10, 20], tipRadiusM: 60 } as const;
