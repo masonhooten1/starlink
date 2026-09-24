@@ -20,4 +20,11 @@ export default [
       ],
     },
   },
+  // Node scripts in scripts/** run outside Astro — give them Node globals.
+  {
+    files: ["scripts/**"],
+    languageOptions: {
+      globals: { Buffer: "readonly", URL: "readonly", console: "readonly", process: "readonly" },
+    },
+  },
 ];

@@ -1,0 +1,29 @@
+---
+interface RelatedLink {
+  href: string;
+  title: string;
+  description: string;
+}
+
+interface Props {
+  links: RelatedLink[];
+}
+
+const { links } = Astro.props;
+---
+
+<section class="related" aria-label="Related guides">
+  <h2>Keep reading</h2>
+  <ul class="related-list">
+    {
+      links.map((link) => (
+        <li class="related-card">
+          <a href={link.href}>
+            <h3>{link.title}</h3>
+            <p>{link.description}</p>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</section>

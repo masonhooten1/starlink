@@ -1,0 +1,71 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import RelatedLinks from "../components/RelatedLinks.astro";
+import ReferralCta from "../components/ReferralCta.astro";
+
+const base = import.meta.env.BASE_URL.replace(/\/+$/, "");
+
+const related = [
+  {
+    href: `${base}/guides/where-to-place-starlink-dish/`,
+    title: "Where to place your Starlink dish",
+    description:
+      "The full walkthrough: direction, mount height, candidate spots, and what to check before you drill.",
+  },
+  {
+    href: `${base}/guides/starlink-field-of-view-obstructions/`,
+    title: "Field of view and obstructions, explained",
+    description:
+      "What the roughly 100° open-sky window means and how obstructions cause dropouts.",
+  },
+];
+---
+
+<BaseLayout
+  title="Starlink Dish Position Map — DishSpotter"
+  description="Drop a pin on satellite imagery and swing a 100° open-sky wedge clear of trees and rooflines — plan a Starlink dish position on the map."
+  path="/planner/"
+>
+  <article class="article">
+    <h1>Starlink dish position map</h1>
+    <p class="lede">
+      The interactive planner is on its way: a satellite map of your property with a draggable pin,
+      distance rings for scale, and a rotatable wedge showing the roughly 100° of open sky the dish
+      needs.
+    </p>
+
+    <h2>What it will do</h2>
+    <p>
+      Find your home by address search, your device location, or plain panning. Drop a pin on a
+      candidate mount — roof peak, eave, or pole — and swing the open-sky wedge clear of trees and
+      rooflines. The wedge starts pointing away from the equator (north for homes in the northern
+      hemisphere, south in the southern) and rotates to match the direction the Starlink app shows
+      for your address.
+    </p>
+    <p>
+      Every plan lives in the URL, so you can compare spots in separate tabs and share a placement
+      with whoever holds the drill.
+    </p>
+
+    <div class="callout">
+      <h2>The official check stays in the app</h2>
+      <p>
+        The map planner is a pre-purchase and pre-drill aid. Starlink's camera-based obstruction
+        scan in the official app — run at the install spot, with hardware in hand — remains the
+        final word on whether a placement is clear.
+      </p>
+    </div>
+
+    <p>
+      While the interactive map finishes up, the guides below cover the same decisions: which way
+      the dish points, how much sky it needs, and how to compare mounting spots.
+    </p>
+  </article>
+
+  <RelatedLinks links={related} />
+
+  <ReferralCta
+    heading="Check Starlink availability for your address"
+    body="Placement is only half the question — sign up through Starlink's official site to check service availability at your address."
+  />
+</BaseLayout>

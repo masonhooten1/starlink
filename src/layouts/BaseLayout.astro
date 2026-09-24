@@ -5,14 +5,39 @@ import { SITE } from "../config";
 interface Props {
   title: string;
   description?: string;
+  /** Route path beginning with "/" — builds the canonical URL and og:url. */
+  path?: string;
 }
 
-const { title, description = "Plan a clear Starlink dish placement before you order." } =
-  Astro.props;
+const {
+  title,
+  description = "Plan a clear Starlink dish placement before you order.",
+  path = "/",
+} = Astro.props;
 
 // `base` is "/starlink" on GitHub Pages project sites; strip the trailing slash
 // so path joins never double up, whatever Astro emits for BASE_URL.
 const base = import.meta.env.BASE_URL.replace(/\/+$/, "");
+
+const canonical = `${SITE.url}${path}`;
+const ogImage = `${SITE.url}/og.png`;
+
+const footerLinks = [
+  { href: `${base}/`, label: "Home" },
+  { href: `${base}/planner/`, label: "Planner" },
+  {
+    href: `${base}/guides/where-to-place-starlink-dish/`,
+    label: "Where to place your dish",
+  },
+  {
+    href: `${base}/guides/starlink-field-of-view-obstructions/`,
+    label: "Field of view & obstructions",
+  },
+  {
+    href: `${base}/guides/satellite-internet-for-remote-homes/`,
+    label: "Satellite internet for remote homes",
+  },
+];
 ---
 
 <!doctype html>
@@ -21,23 +46,60 @@ const base = import.meta.env.BASE_URL.replace(/\/+$/, "");
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
-    <meta name="description" content={description} />
-    <link rel="icon" type="image/svg+xml" href={`${base}/favicon.svg`} />
     <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href={`${base}/favicon.svg`} />
+    <link rel="sitemap" href={`${base}/sitemap-index.xml`} />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
   </head>
   <body>
+    <a class="skip-link" href="#main">Skip to content</a>
     <header class="site-header">
       <nav aria-label="Main">
         <a class="site-name" href={`${base}/`}>{SITE.name}</a>
+        <div class="nav-links">
+          <a href={`${base}/planner/`}>Planner</a>
+          <a
+            class="nav-cta"
+            href={SITE.referralUrl}
+            target="_blank"
+            rel="noopener noreferrer">Get Starlink</a
+          >
+        </div>
       </nav>
     </header>
 
-    <main>
+    <main id="main">
       <slot />
     </main>
 
     <footer class="site-footer">
-      <p>{SITE.disclaimer}</p>
+      <nav class="footer-nav" aria-label="Footer">
+        {footerLinks.map((link) => <a href={link.href}>{link.label}</a>)}
+      </nav>
+      <p>{SITE.disclaimer} The Starlink app has the final word on dish direction and obstructions.</p>
     </footer>
+
+    <div class="sticky-cta" role="complementary" aria-label="Quick actions">
+      <a class="sticky-plan" href={`${base}/planner/`}>Plan your placement</a>
+      <a
+        class="sticky-referral"
+        href={SITE.referralUrl}
+        target="_blank"
+        rel="noopener noreferrer">Get Starlink</a
+      >
+    </div>
   </body>
 </html>

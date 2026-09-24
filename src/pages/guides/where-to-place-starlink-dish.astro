@@ -1,0 +1,113 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import RelatedLinks from "../../components/RelatedLinks.astro";
+import ReferralCta from "../../components/ReferralCta.astro";
+
+const base = import.meta.env.BASE_URL.replace(/\/+$/, "");
+
+const related = [
+  {
+    href: `${base}/guides/starlink-field-of-view-obstructions/`,
+    title: "Field of view and obstructions, explained",
+    description:
+      "What the roughly 100° open-sky window means, elevation angles, and why the dish points away from the equator.",
+  },
+  {
+    href: `${base}/guides/satellite-internet-for-remote-homes/`,
+    title: "Satellite internet for remote homes",
+    description:
+      "How low-earth-orbit service works and why placement decides the experience at your address.",
+  },
+  {
+    href: `${base}/planner/`,
+    title: "The dish position map",
+    description:
+      "Drop a pin on satellite imagery and swing a 100° open-sky wedge clear of trees and rooflines.",
+  },
+];
+---
+
+<BaseLayout
+  title="Where to Place Your Starlink Dish — A Placement Guide"
+  description="A practical walkthrough for choosing a Starlink dish placement: the open-sky window, pointing away from the equator, mount height, and comparing spots before you drill."
+  path="/guides/where-to-place-starlink-dish/"
+>
+  <article class="article">
+    <h1>Where to place your Starlink dish</h1>
+    <p class="lede">
+      Choosing a dish location is the one part of Starlink installation you control before the
+      hardware arrives. Get it right and the dish sees a clear patch of sky all day; get it wrong
+      and trees and rooflines cause dropouts every time a satellite passes behind them.
+    </p>
+
+    <h2>The short answer</h2>
+    <p>
+      Put the dish where it can see a clear, unobstructed window roughly
+      <strong>100° wide</strong>, with that window opened <strong>away from the equator</strong> —
+      north for homes in the United States and everywhere else in the northern hemisphere, south in
+      the southern hemisphere. Everything below is detail; those two facts do most of the work.
+    </p>
+
+    <h2>Find the direction first</h2>
+    <p>
+      Starlink is a moving constellation: dozens of satellites cross your sky at any moment, packed
+      densest toward the poleward side. The dish tracks them as they pass, so it doesn't aim at one
+      point in the sky — it needs the whole corridor to stay open.
+    </p>
+    <div class="callout">
+      <h2>The TV-dish myth</h2>
+      <p>
+        Old advice says to point a dish south. That comes from geostationary TV satellites, which
+        sit in a fixed belt over the equator — a completely different system. A Starlink dish in the
+        US looks <strong>north</strong>, not south, and pointing it at the equator wastes the
+        clearest part of the sky.
+      </p>
+    </div>
+
+    <h2>Walk your property like the dish sees it</h2>
+    <ul>
+      <li>
+        <strong>Roof peak</strong> — usually the widest view, above most nearby clutter. Costs the
+        most effort to reach and to cable.
+      </li>
+      <li>
+        <strong>Eave or fascia</strong> — easier to mount and cable; works when the treeline sits
+        below it on the poleward side.
+      </li>
+      <li>
+        <strong>Pole in the yard</strong> — often the cheapest way to buy height where roof access
+        is awkward; keep it clear of the trees it's standing among.
+      </li>
+      <li>
+        <strong>Patio or ground mount</strong> — fine for testing a spot, rarely clear enough to
+        live on, since even distant trees cut into the window.
+      </li>
+    </ul>
+    <p>
+      Height matters, but <strong>a clear window matters more</strong>. A modest mount with open sky
+      beats a tall one looking into a hedge. And remember foliage is seasonal: bare branches in
+      March can be a wall of leaves in July.
+    </p>
+
+    <h2>Compare spots before you drill</h2>
+    <p>
+      Shortlist two or three candidate spots and compare them properly instead of eyeballing one.
+      The <a href={`${base}/planner/`}>dish position map</a> draws the 100° open-sky wedge over
+      satellite imagery of your property — drag the pin between spots and swing the wedge clear of
+      trees and rooflines. Prefer a temporary mount first, confirm a day of trouble-free service,
+      then commit to holes.
+    </p>
+    <p>
+      Once the hardware is in hand, the Starlink app's camera-based obstruction scan — run at the
+      install spot — is the final word. The map planner gets you to that check with a placement
+      that's already likely to pass.
+    </p>
+  </article>
+
+  <RelatedLinks links={related} />
+
+  <ReferralCta
+    heading="Ready to order?"
+    body="Once you know where the dish can live, check availability and sign up through Starlink's official site."
+  />
+</BaseLayout>

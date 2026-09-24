@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://masonhooten1.github.io/starlink/sitemap-index.xml
