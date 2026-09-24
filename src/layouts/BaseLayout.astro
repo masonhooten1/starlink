@@ -1,0 +1,43 @@
+---
+import "../styles/global.css";
+import { SITE } from "../config";
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "Plan a clear Starlink dish placement before you order." } =
+  Astro.props;
+
+// `base` is "/starlink" on GitHub Pages project sites; strip the trailing slash
+// so path joins never double up, whatever Astro emits for BASE_URL.
+const base = import.meta.env.BASE_URL.replace(/\/+$/, "");
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href={`${base}/favicon.svg`} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <header class="site-header">
+      <nav aria-label="Main">
+        <a class="site-name" href={`${base}/`}>{SITE.name}</a>
+      </nav>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <p>{SITE.disclaimer}</p>
+    </footer>
+  </body>
+</html>
