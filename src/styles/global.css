@@ -159,6 +159,11 @@ main {
   display: none;
 }
 
+/* The planner hides the bar: its bottom sheet carries the CTAs. */
+.sticky-cta.sticky-cta--hidden {
+  display: none;
+}
+
 @media (max-width: 767px) {
   .sticky-cta {
     position: fixed;
@@ -416,8 +421,6 @@ main {
   text-align: center;
   padding-block: var(--space-6);
 }
-
-
 
 /* Illustrative scenario walkthrough */
 .scenario {

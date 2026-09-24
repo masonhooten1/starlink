@@ -7,12 +7,15 @@ interface Props {
   description?: string;
   /** Route path beginning with "/" — builds the canonical URL and og:url. */
   path?: string;
+  /** Hide the sticky mobile CTA bar — the planner's bottom sheet replaces it. */
+  hideStickyCta?: boolean;
 }
 
 const {
   title,
   description = "Plan a clear Starlink dish placement before you order.",
   path = "/",
+  hideStickyCta = false,
 } = Astro.props;
 
 // `base` is "/starlink" on GitHub Pages project sites; strip the trailing slash
@@ -71,11 +74,8 @@ const footerLinks = [
         <a class="site-name" href={`${base}/`}>{SITE.name}</a>
         <div class="nav-links">
           <a href={`${base}/planner/`}>Planner</a>
-          <a
-            class="nav-cta"
-            href={SITE.referralUrl}
-            target="_blank"
-            rel="noopener noreferrer">Get Starlink</a
+          <a class="nav-cta" href={SITE.referralUrl} target="_blank" rel="noopener noreferrer"
+            >Get Starlink</a
           >
         </div>
       </nav>
@@ -89,16 +89,19 @@ const footerLinks = [
       <nav class="footer-nav" aria-label="Footer">
         {footerLinks.map((link) => <a href={link.href}>{link.label}</a>)}
       </nav>
-      <p>{SITE.disclaimer} The Starlink app has the final word on dish direction and obstructions.</p>
+      <p>
+        {SITE.disclaimer} The Starlink app has the final word on dish direction and obstructions.
+      </p>
     </footer>
 
-    <div class="sticky-cta" role="complementary" aria-label="Quick actions">
+    <div
+      class:list={["sticky-cta", { "sticky-cta--hidden": hideStickyCta }]}
+      role="complementary"
+      aria-label="Quick actions"
+    >
       <a class="sticky-plan" href={`${base}/planner/`}>Plan your placement</a>
-      <a
-        class="sticky-referral"
-        href={SITE.referralUrl}
-        target="_blank"
-        rel="noopener noreferrer">Get Starlink</a
+      <a class="sticky-referral" href={SITE.referralUrl} target="_blank" rel="noopener noreferrer"
+        >Get Starlink</a
       >
     </div>
   </body>

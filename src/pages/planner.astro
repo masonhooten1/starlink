@@ -1,7 +1,9 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import RelatedLinks from "../components/RelatedLinks.astro";
-import ReferralCta from "../components/ReferralCta.astro";
+import { SITE } from "../config";
+import "leaflet/dist/leaflet.css";
+import "../styles/planner.css";
 
 const base = import.meta.env.BASE_URL.replace(/\/+$/, "");
 
@@ -15,8 +17,7 @@ const related = [
   {
     href: `${base}/guides/starlink-field-of-view-obstructions/`,
     title: "Field of view and obstructions, explained",
-    description:
-      "What the roughly 100° open-sky window means and how obstructions cause dropouts.",
+    description: "What the roughly 100° open-sky window means and how obstructions cause dropouts.",
   },
 ];
 ---
@@ -25,47 +26,121 @@ const related = [
   title="Starlink Dish Position Map — DishSpotter"
   description="Drop a pin on satellite imagery and swing a 100° open-sky wedge clear of trees and rooflines — plan a Starlink dish position on the map."
   path="/planner/"
+  hideStickyCta
 >
-  <article class="article">
-    <h1>Starlink dish position map</h1>
-    <p class="lede">
-      The interactive planner is on its way: a satellite map of your property with a draggable pin,
-      distance rings for scale, and a rotatable wedge showing the roughly 100° of open sky the dish
-      needs.
-    </p>
-
-    <h2>What it will do</h2>
-    <p>
-      Find your home by address search, your device location, or plain panning. Drop a pin on a
-      candidate mount — roof peak, eave, or pole — and swing the open-sky wedge clear of trees and
-      rooflines. The wedge starts pointing away from the equator (north for homes in the northern
-      hemisphere, south in the southern) and rotates to match the direction the Starlink app shows
-      for your address.
-    </p>
-    <p>
-      Every plan lives in the URL, so you can compare spots in separate tabs and share a placement
-      with whoever holds the drill.
-    </p>
-
-    <div class="callout">
-      <h2>The official check stays in the app</h2>
-      <p>
-        The map planner is a pre-purchase and pre-drill aid. Starlink's camera-based obstruction
-        scan in the official app — run at the install spot, with hardware in hand — remains the
-        final word on whether a placement is clear.
-      </p>
+  <section class="planner" aria-label="Dish placement planner">
+    <div class="planner-stage">
+      <div id="planner-map" class="planner-map" aria-label="Satellite map for dish placement"></div>
+      <p id="planner-toast" class="planner-toast" role="status"></p>
     </div>
 
-    <p>
-      While the interactive map finishes up, the guides below cover the same decisions: which way
-      the dish points, how much sky it needs, and how to compare mounting spots.
-    </p>
-  </article>
+    <aside id="planner-sheet" class="planner-sheet" aria-label="Placement controls">
+      <div id="planner-empty" class="sheet-state">
+        <h2>Drop a pin on your home</h2>
+        <p class="sheet-lede">
+          Search an address, use your device location, or pan the map and tap to drop the pin.
+        </p>
+        <form id="planner-search" class="sheet-search">
+          <label class="sr-only" for="planner-search-input">Street address</label>
+          <input
+            id="planner-search-input"
+            type="search"
+            name="q"
+            autocomplete="street-address"
+            placeholder="Street address, town…"
+          />
+          <button type="submit" id="planner-search-btn" class="sheet-btn">Search address</button>
+        </form>
+        <button type="button" id="planner-locate" class="sheet-btn sheet-btn-secondary"
+          >Use my location</button
+        >
+        <p class="sheet-hint">
+          Manual pan always works: drag the map, zoom in, and tap to drop the pin.
+        </p>
+      </div>
+
+      <div id="planner-ready" class="sheet-state" hidden>
+        <p class="sheet-coords" id="planner-coords"></p>
+        <p class="sheet-guidance" id="planner-guidance"></p>
+
+        <div class="sheet-rotate">
+          <label for="planner-rotate">Rotate the open-sky wedge</label>
+          <div class="sheet-rotate-row">
+            <input
+              id="planner-rotate"
+              type="range"
+              min="0"
+              max="359"
+              step="1"
+              value="0"
+              aria-describedby="planner-az"
+            />
+            <output id="planner-az" for="planner-rotate">0° (N)</output>
+          </div>
+        </div>
+
+        <div class="sheet-actions">
+          <button type="button" id="planner-share" class="sheet-btn sheet-btn-secondary"
+            >Copy share link</button
+          >
+          <a
+            class="sheet-btn sheet-btn-cta"
+            href={SITE.referralUrl}
+            target="_blank"
+            rel="noopener noreferrer">Check Starlink availability →</a
+          >
+        </div>
+
+        <figure class="sheet-sketch">
+          <svg
+            viewBox="0 0 340 150"
+            role="img"
+            aria-label="Illustrative side view: the dish needs a clear view from the horizon up to roughly 25 degrees elevation, above trees and rooflines."
+          >
+            <polygon points="24,140 336,140 336,4" fill="var(--color-sky)" opacity="0.3"></polygon>
+            <line x1="24" y1="140" x2="336" y2="140" stroke="var(--color-muted)" stroke-width="2"
+            ></line>
+            <line
+              x1="24"
+              y1="140"
+              x2="336"
+              y2="4"
+              stroke="var(--color-accent)"
+              stroke-width="1.5"
+              stroke-dasharray="5 5"></line>
+            <text x="120" y="118" font-size="12" fill="var(--color-ink)"
+              >≈25° above the horizon</text
+            >
+            <rect x="20" y="128" width="4" height="14" fill="var(--color-night)"></rect>
+            <ellipse
+              cx="22"
+              cy="124"
+              rx="12"
+              ry="5"
+              transform="rotate(-25 22 124)"
+              fill="var(--color-night)"></ellipse>
+            <polygon points="250,70 270,140 230,140" fill="#2e7d4f"></polygon>
+            <polygon points="300,55 322,140 278,140" fill="#2e7d4f"></polygon>
+            <text x="246" y="60" font-size="12" fill="var(--color-muted)">trees</text>
+          </svg>
+          <figcaption>
+            Illustrative side view — an estimate of the required open sky, not measured data. The
+            camera scan in the official Starlink app, run at the install spot, has the final word.
+          </figcaption>
+        </figure>
+
+        <p class="sheet-honesty">
+          This planner is an estimate to help you compare spots before you buy or drill — it does
+          not analyze images or score obstructions. {SITE.disclaimer}
+        </p>
+      </div>
+    </aside>
+  </section>
 
   <RelatedLinks links={related} />
-
-  <ReferralCta
-    heading="Check Starlink availability for your address"
-    body="Placement is only half the question — sign up through Starlink's official site to check service availability at your address."
-  />
 </BaseLayout>
+
+<script>
+  // Loaded only on /planner/; Leaflet is imported dynamically inside.
+  import "../scripts/planner/main";
+</script>
