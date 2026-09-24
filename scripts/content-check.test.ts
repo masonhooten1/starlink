@@ -117,6 +117,14 @@ describe("built pages", () => {
   });
 });
 
+describe("home honesty label", () => {
+  it("labels the signup walkthrough as an illustrative scenario, never a testimonial", () => {
+    const home = built("index.html");
+    expect(home).toContain("Illustrative scenario");
+    expect(home).not.toMatch(/customers (like|say)|testimonial/i);
+  });
+});
+
 describe("sitemap", () => {
   it("lists every public route and excludes the 404", () => {
     const index = built("sitemap-index.xml");

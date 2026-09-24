@@ -411,3 +411,72 @@ main {
   text-align: center;
   padding-block: var(--space-6);
 }
+
+
+
+/* Illustrative scenario walkthrough */
+.scenario {
+  margin-top: var(--space-6);
+}
+
+.scenario-flag {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  padding: 0.3rem 0.8rem;
+  margin-bottom: var(--space-3);
+}
+
+.scenario-lede {
+  color: var(--color-muted);
+  max-width: 40rem;
+}
+
+.scenario-steps {
+  list-style: none;
+  counter-reset: scenario;
+  margin: var(--space-4) 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: var(--space-3);
+}
+
+.scenario-steps li {
+  counter-increment: scenario;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: var(--space-4);
+  margin: 0;
+}
+
+.scenario-steps .vignette {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+  margin-bottom: var(--space-3);
+}
+
+.scenario-steps h3 {
+  margin: 0 0 var(--space-2);
+}
+
+.scenario-steps p {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 0.9375rem;
+}
+
+.scenario-out {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+}
