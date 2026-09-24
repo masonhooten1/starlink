@@ -1,0 +1,107 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import RelatedLinks from "../../components/RelatedLinks.astro";
+import ReferralCta from "../../components/ReferralCta.astro";
+import { SITE } from "../../config";
+
+const base = import.meta.env.BASE_URL.replace(/\/+$/, "");
+
+const related = [
+  {
+    href: `${base}/guides/where-to-place-starlink-dish/`,
+    title: "Where to place your Starlink dish",
+    description:
+      "A practical walkthrough: direction, mount height, candidate spots, and what to check before you drill.",
+  },
+  {
+    href: `${base}/guides/starlink-field-of-view-obstructions/`,
+    title: "Field of view and obstructions, explained",
+    description:
+      "What the roughly 100° open-sky window means, elevation angles, and why the dish points away from the equator.",
+  },
+  {
+    href: `${base}/planner/`,
+    title: "The dish position map",
+    description:
+      "Drop a pin on satellite imagery and swing a 100° open-sky wedge clear of trees and rooflines.",
+  },
+];
+---
+
+<BaseLayout
+  title="Satellite Internet for Remote Homes — What to Know"
+  description="Satellite internet for remote homes, explained: how low-earth-orbit service differs from the old satellite internet, why placement decides your experience, and what to check before ordering."
+  path="/guides/satellite-internet-for-remote-homes/"
+>
+  <article class="article">
+    <h1>Satellite internet for remote homes</h1>
+    <p class="lede">
+      Cable and fiber stop at the county line; DSL fades out; cell towers thin past the last town.
+      Satellite internet is the option that reaches everywhere — if the dish can see the sky.
+    </p>
+
+    <h2>Why satellite reaches where cables don't</h2>
+    <p>
+      Wired internet follows construction: every mile of rural line serves a handful of homes, so
+      providers stop where the density does. Satellite service inverts the math — the infrastructure
+      is overhead, shared by everyone in view of it. For a farmhouse, a homestead at the end of a
+      grading road, or a cabin past the last pole, that's the difference between having an option
+      and not.
+    </p>
+
+    <h2>Two generations of satellite internet</h2>
+    <p>
+      The old satellite internet many rural households remember ran over <strong>geostationary</strong>
+      satellites — single spacecraft parked extremely far above the equator. The distance that makes
+      them stationary in the sky also makes the round trip slow: latency is high enough that video
+      calls and games feel off, and one satellite means one narrow pointing direction.
+    </p>
+    <p>
+      <strong>Low-earth-orbit</strong> constellations like Starlink work differently. Thousands of
+      much smaller satellites fly a few hundred kilometers up — low enough that the round trip feels
+      like terrestrial broadband. The trade is geometry: instead of one fixed point, the dish needs a
+      wide, moving corridor of open sky, because the satellites it uses are always crossing it.
+    </p>
+
+    <h2>Placement is part of the product</h2>
+    <p>
+      That geometry is why two neighbors on the same service can have completely different
+      experiences. The constellation doesn't change from one property to the next — what changes is
+      what the dish can see. A dish under a treeline loses satellites as they cross behind the
+      canopy; a dish with a clear window keeps them. If you're evaluating whether satellite service
+      makes sense for your home, evaluate the <strong>placement</strong> first: it decides most of
+      the day-to-day experience. The <a href={`${base}/planner/`}>dish position map</a> shows a
+      property's open-sky window on satellite imagery before any hardware is bought.
+    </p>
+
+    <h2>What to check before you order</h2>
+    <ol>
+      <li>
+        <strong>Availability</strong> — check your address on
+        <a href={SITE.referralUrl} target="_blank" rel="noopener noreferrer">starlink.com</a>
+        to confirm service is live in your area.
+      </li>
+      <li>
+        <strong>A placement</strong> — shortlist where the dish would live and compare the spots
+        with the planner: poleward direction, a window roughly 100° wide, trees and rooflines kept
+        clear.
+      </li>
+      <li>
+        <strong>The official check</strong> — after the hardware arrives, run the camera-based
+        obstruction scan in the Starlink app at the install spot. It's the final word on whether
+        your placement is clear.
+      </li>
+    </ol>
+    <p>
+      None of those steps costs anything, and the first two happen before you've spent a cent on
+      hardware.
+    </p>
+  </article>
+
+  <RelatedLinks links={related} />
+
+  <ReferralCta
+    heading="Check availability at your address"
+    body="If the sky works and service is live in your area, sign up through Starlink's official site."
+  />
+</BaseLayout>

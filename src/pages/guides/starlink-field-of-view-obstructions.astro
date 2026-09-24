@@ -1,0 +1,111 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import RelatedLinks from "../../components/RelatedLinks.astro";
+import ReferralCta from "../../components/ReferralCta.astro";
+
+const base = import.meta.env.BASE_URL.replace(/\/+$/, "");
+
+const related = [
+  {
+    href: `${base}/guides/where-to-place-starlink-dish/`,
+    title: "Where to place your Starlink dish",
+    description:
+      "A practical walkthrough: direction, mount height, candidate spots, and what to check before you drill.",
+  },
+  {
+    href: `${base}/guides/satellite-internet-for-remote-homes/`,
+    title: "Satellite internet for remote homes",
+    description:
+      "How low-earth-orbit service works and why placement decides the experience at your address.",
+  },
+  {
+    href: `${base}/planner/`,
+    title: "The dish position map",
+    description:
+      "Drop a pin on satellite imagery and swing a 100° open-sky wedge clear of trees and rooflines.",
+  },
+];
+---
+
+<BaseLayout
+  title="Starlink Field of View and Obstructions, Explained"
+  description="What Starlink's field of view requirement means: the roughly 100° open-sky window, elevation angles, why dishes point away from the equator, and how obstructions cause dropouts."
+  path="/guides/starlink-field-of-view-obstructions/"
+>
+  <article class="article">
+    <h1>Starlink's field of view and obstructions, explained</h1>
+    <p class="lede">
+      Most placement advice stops at "keep it clear." This page explains what the dish actually
+      needs to see — the open-sky window, how high off the horizon it must stay, and what happens
+      when something stands in the way.
+    </p>
+
+    <h2>A moving constellation, not one satellite</h2>
+    <p>
+      A satellite TV dish aims at one satellite parked in a fixed spot. Starlink is the opposite:
+      the dish serves a constellation of low-earth-orbit satellites that cross the sky continuously,
+      handing your connection from one to the next. Instead of a pointing line, the dish needs a
+      <strong>wide corridor of open sky</strong> — roughly <strong>100° across</strong> above the
+      dish. Installation estimates for that field of view run from 90° to 110°, which is why the
+      planner defaults to a 100° wedge and lets you rotate it.
+    </p>
+
+    <h2>Elevation: the 25° planning line</h2>
+    <p>
+      The window isn't only wide — it also has to be high enough off the horizon. Early Starlink
+      guidance asked for a clear view starting about <strong>25° above the horizon</strong>, and
+      that figure stuck as the rule of thumb. The constellation itself has since grown more
+      forgiving: satellites in lower orbits reach your dish from lower angles, so today's placements
+      tolerate more obstruction near the horizon than older forum guides claim.
+    </p>
+    <p>
+      For planning, stay conservative: treat anything below about 25° as a bonus zone, not a
+      requirement. A window that's clear from 25° upward isn't a marginal placement — it's one with
+      margin.
+    </p>
+
+    <h2>Why the dish points away from the equator</h2>
+    <p>
+      Satellite density in the Starlink constellation rises toward its poleward limit — the orbits
+      cluster as they approach their maximum inclination — and the dish's electronics are oriented
+      accordingly. A dish in the northern hemisphere looks north; in the southern hemisphere, south.
+      There's a second reason to keep the equatorial side low: geostationary satellites occupy a
+      belt over the equator, and a Starlink dish pointing that way is aimed at sky the constellation
+      barely uses.
+    </p>
+    <div class="callout">
+      <h2>Where the "face south" advice comes from</h2>
+      <p>
+        Geostationary TV satellites sit over the equator, so TV dishes in the US face south.
+        Starlink's dish points away from the equator for the reasons above — the official Starlink
+        app shows the exact direction for your address and has the final word.
+      </p>
+    </div>
+
+    <h2>What obstructions actually do</h2>
+    <p>
+      When a tree branch or roofline crosses the window, the connection doesn't just slow down — it
+      drops. The dish waits out each blocked pass, and with satellites crossing every few seconds,
+      even a thin obstruction in the wrong part of the sky turns into regular interruptions:
+      streams freeze, calls drop, downloads stall. Trees are the worst offenders because foliage
+      absorbs the signal; rooflines and outbuildings block outright; and seasonal leaf growth can
+      turn a clear winter view into a summer problem.
+    </p>
+
+    <h2>Checking a view, in the right order</h2>
+    <p>
+      First scout on satellite imagery — the <a href={`${base}/planner/`}>dish position map</a>
+      draws the 100° wedge over your property so you can judge sightlines from a desk or a phone,
+      before any hardware exists. Then, once the dish is in hand, run the camera-based obstruction
+      scan in the official Starlink app at the install spot. The app is the final word; the map
+      planner gets you to it with a placement that's already likely to pass.
+    </p>
+  </article>
+
+  <RelatedLinks links={related} />
+
+  <ReferralCta
+    heading="Check your own sky"
+    body="Open the planner, drop a pin on your home, and see whether the 100° window fits between your trees."
+  />
+</BaseLayout>

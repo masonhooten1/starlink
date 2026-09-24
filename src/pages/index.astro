@@ -1,29 +1,245 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import RelatedLinks from "../components/RelatedLinks.astro";
+import ReferralCta from "../components/ReferralCta.astro";
 import { SITE } from "../config";
 
-// `base` is "/starlink" on GitHub Pages project sites; strip the trailing slash
-// so path joins never double up, whatever Astro emits for BASE_URL.
 const base = import.meta.env.BASE_URL.replace(/\/+$/, "");
+
+const steps = [
+  {
+    title: "Find your home",
+    body: "Search an address or pan the satellite imagery and drop a pin on your home.",
+  },
+  {
+    title: "Try candidate spots",
+    body: "Drag the pin between the roof, the yard, and a pole — distance rings at 5, 10, and 20 meters keep the scale honest against real trees and rooflines.",
+  },
+  {
+    title: "Rotate the open-sky wedge",
+    body: "The dish needs a clear window roughly 100° wide. It starts facing north (in the northern hemisphere) and you swing it clear of trees and rooflines.",
+  },
+  {
+    title: "Compare spots and sign up",
+    body: "Keep the spot with the widest clear window, sign up through Starlink's official site, and confirm with the app's camera check once the hardware arrives.",
+  },
+];
+
+const faqs = [
+  {
+    q: "Which way should a Starlink dish face?",
+    a: "Away from the equator. For homes in the US — everywhere in the northern hemisphere — the dish's field of view opens to the north; in the southern hemisphere it opens south. The old advice to 'face it south like a TV dish' comes from geostationary TV satellites parked over the equator, which Starlink doesn't use. The Starlink app shows the exact direction for your address and has the final word.",
+  },
+  {
+    q: "How much open sky does Starlink need?",
+    a: "Plan on a clear window roughly 100° wide above the dish — installation estimates run 90–110°. Keep it free of trees and rooflines from about 25° above the horizon upward as a conservative line. Newer Starlink satellites accept lower angles than that old rule of thumb, so a placement that meets it carries margin, not risk.",
+  },
+  {
+    q: "Can I check for obstructions before buying the hardware?",
+    a: "That is exactly what the planner is for. Starlink's own obstruction check is a camera scan in the official Starlink app, and it needs the hardware in hand at the install spot. DishSpotter covers the step before that: scouting your property on satellite imagery from a desk or a phone.",
+  },
+  {
+    q: "Where is the best place to mount the dish?",
+    a: "The clearest spot with an open view across the poleward half of the sky — a roof peak, an eave above the treeline, or a pole in an open yard, whichever your property allows. Height helps, but a clear window matters more than raw height. Compare two or three candidate spots in the planner before committing to holes.",
+  },
+  {
+    q: "Is DishSpotter affiliated with Starlink?",
+    a: "No — it is an independent planning aid, not affiliated with SpaceX or Starlink, and the official app remains the final word on direction and obstructions. If you sign up through the referral link, the site earns a referral credit at no extra cost to you.",
+  },
+];
+
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: SITE.name,
+  url: SITE.url,
+};
+
+const howToSchema = {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  name: "How to plan a Starlink dish placement",
+  description:
+    "Scout a clear Starlink dish placement on satellite imagery before ordering the hardware.",
+  step: steps.map((s, i) => ({
+    "@type": "HowToStep",
+    position: i + 1,
+    name: s.title,
+    text: s.body,
+  })),
+};
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+
+const related = [
+  {
+    href: `${base}/guides/where-to-place-starlink-dish/`,
+    title: "Where to place your Starlink dish",
+    description:
+      "A practical walkthrough: direction, mount height, candidate spots, and what to check before you drill.",
+  },
+  {
+    href: `${base}/guides/starlink-field-of-view-obstructions/`,
+    title: "Field of view and obstructions, explained",
+    description:
+      "The roughly 100° open-sky window, elevation angles, and why dishes point away from the equator.",
+  },
+  {
+    href: `${base}/guides/satellite-internet-for-remote-homes/`,
+    title: "Satellite internet for remote homes",
+    description:
+      "How low-earth-orbit service works, and why placement decides the experience at your address.",
+  },
+];
 ---
 
 <BaseLayout
-  title={`${SITE.name} — plan your Starlink dish placement`}
+  title="Starlink Dish Placement Planner — DishSpotter"
   description="Check whether your home has a clear line of sight for Starlink before you order. Drop a pin, swing the dish's open-sky wedge clear of trees, and sign up with confidence."
+  path="/"
 >
   <section class="hero">
+    <svg
+      class="hero-art"
+      viewBox="0 0 640 360"
+      role="img"
+      aria-labelledby="hero-art-title hero-art-desc"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <title id="hero-art-title"
+        >A house with a dish whose 100-degree open-sky wedge clears the nearby trees</title
+      >
+      <desc id="hero-art-desc"
+        >A rooftop dish points north; its open-sky wedge is drawn as a clear sector toward
+        passing satellites, while two trees stay outside the wedge.</desc
+      >
+      <!-- sky -->
+      <rect width="640" height="360" rx="14" fill="#101b2b"></rect>
+      <!-- constellation orbit -->
+      <path
+        d="M30 300 Q320 70 610 300"
+        fill="none"
+        stroke="#2c3f57"
+        stroke-width="2"
+        stroke-dasharray="3 9"></path>
+      <!-- satellites -->
+      <g fill="#7fd3ff">
+        <circle cx="120" cy="240" r="4"></circle>
+        <circle cx="520" cy="240" r="4"></circle>
+      </g>
+      <g transform="translate(320 158)" stroke="#7fd3ff" stroke-width="2" fill="none">
+        <rect x="-30" y="-4" width="18" height="8" rx="2"></rect>
+        <rect x="12" y="-4" width="18" height="8" rx="2"></rect>
+        <circle r="4" fill="#7fd3ff" stroke="none"></circle>
+      </g>
+      <!-- open-sky wedge: apex at the dish, opening poleward (north = up) -->
+      <path
+        d="M450 255 L150 60 A340 340 0 0 1 600 90 Z"
+        fill="#1d5fd6"
+        opacity="0.18"
+        stroke="#7fd3ff"
+        stroke-width="2"></path>
+      <text
+        x="238"
+        y="150"
+        font-family="system-ui, sans-serif"
+        font-size="15"
+        fill="#7fd3ff">100° open sky</text
+      >
+      <!-- ground -->
+      <path d="M0 318 H640 V360 H0 Z" fill="#0d1c2c"></path>
+      <!-- trees, outside the wedge -->
+      <g fill="#1d5245">
+        <path d="M105 318 L105 232 L78 280 L92 274 L70 318 Z"></path>
+        <rect x="99" y="312" width="12" height="10" fill="#152e3d"></rect>
+        <path d="M185 318 L185 262 L166 296 L176 292 L160 318 Z"></path>
+        <rect x="180" y="314" width="10" height="8" fill="#152e3d"></rect>
+      </g>
+      <!-- house -->
+      <rect x="470" y="230" width="140" height="88" fill="#1c2d40"></rect>
+      <path d="M455 232 L540 180 L625 232 Z" fill="#2c3f57"></path>
+      <rect x="500" y="258" width="24" height="24" rx="3" fill="#f8c667"></rect>
+      <rect x="560" y="258" width="24" height="24" rx="3" fill="#f8c667"></rect>
+      <!-- dish on a short mast at the eave -->
+      <line x1="468" y1="228" x2="450" y2="252" stroke="#9fb6cc" stroke-width="5"></line>
+      <ellipse
+        cx="447"
+        cy="252"
+        rx="14"
+        ry="8"
+        transform="rotate(-38 447 252)"
+        fill="#e8eef4"></ellipse>
+      <!-- north compass -->
+      <g stroke="#7fd3ff" fill="none">
+        <circle cx="62" cy="64" r="20"></circle>
+        <path d="M62 76 L62 54 M56 60 L62 52 L68 60" stroke-width="2"></path>
+      </g>
+      <text
+        x="55"
+        y="30"
+        font-family="system-ui, sans-serif"
+        font-size="14"
+        fill="#7fd3ff">N</text
+      >
+    </svg>
+
     <h1>Plan your Starlink dish placement before you order</h1>
-    <p>
+    <p class="lede">
       Trees and rooflines cause signal dropouts — but Starlink's own obstruction check only runs in
-      the app, at the install spot, with hardware in hand. {SITE.name} lets you scout your property from
-      a map instead: drop a pin on satellite imagery, swing the dish's open-sky wedge clear of obstructions,
-      and know where the dish can live before you spend a cent.
+      the app, at the install spot, with hardware in hand. {SITE.name} lets you scout your property
+      from a map instead: drop a pin on satellite imagery, swing the dish's open-sky wedge clear of
+      obstructions, and know where the dish can live before you spend a cent.
     </p>
-    <p>
+    <p class="cta-row">
       <a class="button" href={`${base}/planner/`}>Open the planner</a>
-    </p>
-    <p class="placeholder-note">
-      Scaffold placeholder — the planner and guides land in later tasks.
+      <a class="button button-secondary" href={SITE.referralUrl} target="_blank" rel="noopener noreferrer"
+        >Check availability on Starlink</a
+      >
     </p>
   </section>
+
+  <section aria-labelledby="how-it-works">
+    <h2 id="how-it-works">How it works</h2>
+    <ol class="steps">
+      {
+        steps.map((s) => (
+          <li>
+            <h3>{s.title}</h3>
+            <p>{s.body}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <section class="faq" aria-labelledby="faq">
+    <h2 id="faq">Frequently asked questions</h2>
+    {
+      faqs.map((f) => (
+        <details>
+          <summary>{f.q}</summary>
+          <p>{f.a}</p>
+        </details>
+      ))
+    }
+  </section>
+
+  <RelatedLinks links={related} />
+
+  <ReferralCta
+    heading="Check your home before you order"
+    body="The planner takes about a minute: find your home on the map, swing the wedge clear of trees and rooflines, and you'll know whether Starlink has the sky it needs."
+  />
+
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(websiteSchema)}></script>
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(howToSchema)}></script>
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(faqSchema)}></script>
 </BaseLayout>
