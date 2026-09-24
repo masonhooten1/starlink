@@ -101,6 +101,7 @@ main {
   color: var(--color-muted);
   text-decoration: none;
   font-weight: 500;
+  padding: 0.55rem 0.3rem; /* lift the tap target toward 44px */
 }
 
 .nav-links a:hover {
@@ -111,6 +112,7 @@ main {
   display: inline-block;
   min-height: 44px; /* touch target */
   line-height: 44px;
+  white-space: nowrap;
   padding-inline: var(--space-3);
   border-radius: var(--radius);
   background: var(--color-accent);
@@ -144,6 +146,7 @@ main {
   color: var(--color-muted);
   font-size: 0.875rem;
   text-decoration: none;
+  padding: 0.45rem 0.3rem; /* tap target headroom */
 }
 
 .footer-nav a:hover {
@@ -169,13 +172,15 @@ main {
   }
 
   .sticky-cta a {
-    flex: 1;
+    flex: 1 1 auto; /* grow evenly but never clip a label at 360px */
     display: flex;
     align-items: center;
     justify-content: center;
     min-height: 56px; /* touch target */
     font-weight: 600;
     text-decoration: none;
+    white-space: nowrap;
+    font-size: 0.95rem;
   }
 
   .sticky-plan {
