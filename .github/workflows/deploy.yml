@@ -6,15 +6,13 @@ on:
   workflow_dispatch:
 
 # id-token: write lets deploy-pages exchange a short-lived OIDC token for the
-# Pages deployment. administration: write exists purely so configure-pages can
-# flip the repo's Pages source to "GitHub Actions" on the very first run (the
-# repo-owner token used elsewhere cannot). Safe to drop once the first deploy
-# has succeeded.
+# Pages deployment. The Pages site itself must be enabled once with
+# "Source: GitHub Actions" (Settings → Pages) — GITHUB_TOKEN cannot request
+# the administration permission, so that step cannot be automated from here.
 permissions:
   contents: read
   pages: write
   id-token: write
-  administration: write
 
 # Serializes deployments; never cancels a running deploy mid-flight.
 concurrency:
