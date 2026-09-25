@@ -5,7 +5,7 @@
  *
  * All placement math lives in src/lib — this file is DOM and event wiring.
  */
-import type { Circle, GeoJSON, Marker } from "leaflet";
+import type { Circle, GeoJSON, GeoJSONOptions, Marker, SVG } from "leaflet";
 import { GEOCODER, TILE, WEDGE } from "../../config";
 import { defaultWedgeAzimuth, destination, wedgeSectorGeoJSON } from "../../lib/geo";
 import { decodePlan, encodePlan, type PlanState } from "../../lib/shareState";
@@ -145,20 +145,23 @@ function startPlanner(L: Leaflet, dom: PlannerDom): void {
     // One shared SVG renderer for every vector layer: initialized once against
     // the settled map instead of lazily per layer.
     const vectorRenderer = L.svg({ padding: 0.5 });
+    // L.geoJSON relays `renderer` to the vector layers it creates, but the
+    // installed GeoJSONOptions type omits it — declare that relay honestly.
+    const wedgeOptions: GeoJSONOptions & { renderer?: SVG } = {
+      renderer: vectorRenderer,
+      interactive: false,
+      style: {
+        color: WEDGE_COLOR,
+        weight: 2,
+        opacity: 0.9,
+        fillColor: WEDGE_FILL,
+        fillOpacity: 0.3,
+      },
+    };
 
     wedgeLayer = L.geoJSON(
       wedgeSectorGeoJSON(plan.lat, plan.lng, plan.az, WEDGE.spreadDeg, WEDGE.tipRadiusM),
-      {
-        renderer: vectorRenderer,
-        interactive: false,
-        style: {
-          color: WEDGE_COLOR,
-          weight: 2,
-          opacity: 0.9,
-          fillColor: WEDGE_FILL,
-          fillOpacity: 0.3,
-        },
-      },
+      wedgeOptions,
     ).addTo(map);
 
     for (const meters of WEDGE.ringsM) {
