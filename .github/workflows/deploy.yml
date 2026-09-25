@@ -36,12 +36,6 @@ jobs:
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
-        with:
-          # Attempts the one-time Pages enablement via the workflow token.
-          # If the repository disallows elevated workflow tokens this is a
-          # no-op warning — enable manually: Settings → Pages → Build and
-          # deployment → Source: GitHub Actions.
-          enablement: true
 
       - name: Build
         run: npm run build
