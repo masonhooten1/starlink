@@ -3,7 +3,7 @@
   "type": "module",
   "version": "0.0.1",
   "private": true,
-  "description": "DishSpotter \u2014 a Starlink dish placement planner (independent planning aid)",
+  "description": "DishSpotter — a Starlink dish placement planner (independent planning aid)",
   "engines": {
     "node": ">=22.12.0"
   },
@@ -24,11 +24,13 @@
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",
-    "astro": "^7.3.5"
+    "astro": "^7.3.5",
+    "leaflet": "^1.9.4"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
     "@eslint/js": "^10.0.1",
+    "@types/leaflet": "^1.9.22",
     "@vitest/coverage-v8": "^4.1.11",
     "eslint": "^10.11.0",
     "eslint-plugin-astro": "^1.7.0",
