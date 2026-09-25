@@ -1,0 +1,66 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# id-token: write lets deploy-pages exchange a short-lived OIDC token for the
+# Pages deployment. administration: write exists purely so configure-pages can
+# flip the repo's Pages source to "GitHub Actions" on the very first run (the
+# repo-owner token used elsewhere cannot). Safe to drop once the first deploy
+# has succeeded.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+  administration: write
+
+# Serializes deployments; never cancels a running deploy mid-flight.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build static site
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+        with:
+          # Attempts the one-time Pages enablement via the workflow token.
+          # If the repository disallows elevated workflow tokens this is a
+          # no-op warning — enable manually: Settings → Pages → Build and
+          # deployment → Source: GitHub Actions.
+          enablement: true
+
+      - name: Build
+        run: npm run build
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
