@@ -89,6 +89,11 @@ function failPlanner(dom: PlannerDom, error: unknown): void {
 
 function startPlanner(L: Leaflet, dom: PlannerDom): void {
   const map = L.map("planner-map", { zoomControl: true });
+  // Give the map its view BEFORE adding any layer. Leaflet adds layers queued
+  // on the map's 'load' event while it has no view, and the lazily-created
+  // vector renderer never gets its pixel bounds set in that cascade — the
+  // first polygon added then throws in _clipPoints.
+  map.setView([20, 0], 2);
   // Esri World Imagery per config; the attribution control is always on.
   L.tileLayer(TILE.url, {
     attribution: TILE.attribution,
@@ -137,10 +142,14 @@ function startPlanner(L: Leaflet, dom: PlannerDom): void {
   const ensureLayers = (): void => {
     if (!plan || pin || handle || wedgeLayer) return;
     const position: [number, number] = [plan.lat, plan.lng];
+    // One shared SVG renderer for every vector layer: initialized once against
+    // the settled map instead of lazily per layer.
+    const vectorRenderer = L.svg({ padding: 0.5 });
 
     wedgeLayer = L.geoJSON(
       wedgeSectorGeoJSON(plan.lat, plan.lng, plan.az, WEDGE.spreadDeg, WEDGE.tipRadiusM),
       {
+        renderer: vectorRenderer,
         interactive: false,
         style: {
           color: WEDGE_COLOR,
@@ -156,6 +165,7 @@ function startPlanner(L: Leaflet, dom: PlannerDom): void {
       ringCircles.push(
         L.circle(position, {
           radius: meters,
+          renderer: vectorRenderer,
           interactive: false,
           color: RING_COLOR,
           weight: 1,
@@ -222,7 +232,11 @@ function startPlanner(L: Leaflet, dom: PlannerDom): void {
   };
 
   map.on("click", (event) => {
+    const wasFirst = plan === null;
     placePin(event.latlng.lat, event.latlng.lng);
+    // A tap at world zoom leaves the wedge sub-pixel — pull in so the
+    // placement tools mean something (search and GPS already fly close).
+    if (wasFirst && map.getZoom() < 15) map.flyTo(event.latlng, 16);
   });
 
   let tileNoticeShown = false;
@@ -343,13 +357,12 @@ function startPlanner(L: Leaflet, dom: PlannerDom): void {
   const initial = decodePlan(new URLSearchParams(location.search));
   if (initial) {
     plan = initial;
+    // View first, then layers: never add vector layers to a map with no view.
+    map.setView([initial.lat, initial.lng], 17);
     ensureLayers();
     showReady();
     render(true);
-    map.setView([initial.lat, initial.lng], 17);
     syncUrl(); // normalize the URL (e.g. az=361 → 1) so re-shares are clean
-  } else {
-    map.setView([20, 0], 2);
   }
 }
 
